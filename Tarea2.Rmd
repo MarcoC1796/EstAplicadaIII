@@ -123,3 +123,37 @@ for(i in 1:9) {
   print(result)
 }
 ```
+
+## Pregunta 4
+
+Asumiendo que el vector de medias es $\mu'=(0,0)$
+
+* $\begin{pmatrix}5 & 4 \\4 & 5\end{pmatrix}$
+```{r}
+library(ellipse)
+ma <- cbind(c(5,4),c(4,5))
+e <- eigen(ma)
+print(paste("Eje mayor:",sqrt(e$values[1])))
+print(paste("Eje menor:",sqrt(e$values[2])))
+plot(ellipse(ma))
+```
+
+* $\begin{pmatrix}5 & -4 \\-4 & 5\end{pmatrix}$
+```{r}
+library(ellipse)
+ma <- cbind(c(5,-4),c(-4,5))
+e <- eigen(ma)
+print(paste("Eje mayor:",sqrt(e$values[1])))
+print(paste("Eje menor:",sqrt(e$values[2])))
+plot(ellipse(ma))
+```
+
+* $\begin{pmatrix}5 & -4 \\-4 & 5\end{pmatrix}$
+```{r}
+library(ellipse)
+ma <- cbind(c(3,0),c(0,3))
+e <- eigen(ma)
+print(paste("Eje mayor:",sqrt(e$values[1])))
+print(paste("Eje menor:",sqrt(e$values[2])))
+plot(ellipse(ma))
+```
