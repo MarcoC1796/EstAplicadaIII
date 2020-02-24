@@ -479,6 +479,43 @@ print(det(S))</code></pre>
 <pre class="r"><code>print(prod(diag(S))*prod(eigen(R)$values))</code></pre>
 <pre><code>## [1] 9.496053e-09</code></pre>
 </div>
+<div id="pregunta-1" class="section level2">
+<h2>Pregunta 1</h2>
+<p><em>1. ¿Es el extremo superior siempre un outlier?</em><br />
+No, supongamos que la muestra viene de una una distribución <span class="math inline">\(\mathcal{N}(0,1)\)</span>. Entonces esta muestra puede tomar valores en todo <span class="math inline">\(\mathbb{R}\)</span>. Sin embargo, es posible que la muestra completa quede dentro de las barras.</p>
+<p><em>2. ¿Es posible para la media o la mediana quedar afuera de los cuartiles o incluso afuera de los whiskers?</em><br />
+No es posible para la mediana porque este es el quantil de <span class="math inline">\(50 \%\)</span>. La media tampoco puede estar fuera de los outliers ya que significaria una probabilidad acumulada fuera de los quantiles, y por definicón eso no es posible aunque los outliers si afectan a la media conforme estos se acercan o alejan por eso la media puede no ser una medida representativa de la muestra si resulta que uno de los outliers.</p>
+<p><em>c. Supongan que los datos se distribuyen <span class="math inline">\(\mathcal{N}(0,1)\)</span>. ¿Qué porcentaje de los datos esperan que caigan afuera de los whiskers?</em></p>
+<pre class="r"><code>q1 &lt;- qnorm(0.25,mean=0,sd=1)
+q3 &lt;- qnorm(0.75,mean=0,sd=1)
+qRange &lt;- q3-q1
+lW &lt;- q1-1.5*qRange
+uW &lt;- q3+1.5*qRange
+result &lt;- pnorm(lW,mean=0,sd=1)+(1-pnorm(uW,mean=0,sd=1))
+result</code></pre>
+<pre><code>## [1] 0.006976603</code></pre>
+<p><em>d. ¿Qué porcentaje de los datos se espera que caigan fuera de los whiskers si suponemos que los datos son normales con media 0 y varianza <span class="math inline">\(\sigma^2\)</span> con varianza desconocida <span class="math inline">\(\sigma^2\)</span>?</em> Como la varianza escala todo el boxplot incluyendo los Whiskers, entonces el porcentaje de las observaciones que se espera que caigan fuera del boxplot es la misma que para la distribución normal estandar. Por ejemplo:</p>
+<pre class="r"><code>x=2
+for(i in 1:9) {
+  x=x*x
+  q1 &lt;- qnorm(0.25,mean=0,sd=x)
+  q3 &lt;- qnorm(0.75,mean=0,sd=x)
+  qRange &lt;- q3-q1
+  lW &lt;- q1-1.5*qRange
+  uW &lt;- q3+1.5*qRange
+  result &lt;- pnorm(lW,mean=0,sd=x)+(1-pnorm(uW,mean=0,sd=x))
+  print(result)
+}</code></pre>
+<pre><code>## [1] 0.006976603
+## [1] 0.006976603
+## [1] 0.006976603
+## [1] 0.006976603
+## [1] 0.006976603
+## [1] 0.006976603
+## [1] 0.006976603
+## [1] 0.006976603
+## [1] 0.006976603</code></pre>
+</div>
 </div>
 
 

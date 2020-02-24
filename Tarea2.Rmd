@@ -88,3 +88,38 @@ R <- cor(log(df), use="complete.obs")
 print(det(S))
 print(prod(diag(S))*prod(eigen(R)$values))
 ```
+
+## Pregunta 1
+
+*1. ¿Es el extremo superior siempre un outlier?*  
+No, supongamos que la muestra viene de una una distribución $\mathcal{N}(0,1)$. Entonces esta muestra puede tomar valores en todo $\mathbb{R}$. Sin embargo, es posible que la muestra completa quede dentro de las barras.
+
+*2. ¿Es posible para la media o la mediana quedar afuera de los cuartiles o incluso afuera de los whiskers?*  
+No es posible para la mediana porque este es el quantil de $50 \%$. La media tampoco puede estar fuera de los outliers ya que significaria una probabilidad acumulada fuera de los quantiles, y por definicón eso no es posible aunque los outliers si afectan a la media conforme estos se acercan o alejan por eso la media puede no ser una medida representativa de la muestra si resulta que uno de los outliers.
+
+*c. Supongan que los datos se distribuyen $\mathcal{N}(0,1)$. ¿Qué porcentaje de los datos esperan que caigan afuera de los whiskers?*  
+```{r}
+q1 <- qnorm(0.25,mean=0,sd=1)
+q3 <- qnorm(0.75,mean=0,sd=1)
+qRange <- q3-q1
+lW <- q1-1.5*qRange
+uW <- q3+1.5*qRange
+result <- pnorm(lW,mean=0,sd=1)+(1-pnorm(uW,mean=0,sd=1))
+result
+```
+
+*d. ¿Qué porcentaje de los datos se espera que caigan fuera de los whiskers si suponemos que los datos son normales con media 0 y varianza $\sigma^2$ con varianza desconocida $\sigma^2$?*
+Como la varianza escala todo el boxplot incluyendo los Whiskers, entonces el porcentaje de las observaciones que se espera que caigan fuera del boxplot es la misma que para la distribución normal estandar. Por ejemplo:
+```{r}
+x=2
+for(i in 1:9) {
+  x=x*x
+  q1 <- qnorm(0.25,mean=0,sd=x)
+  q3 <- qnorm(0.75,mean=0,sd=x)
+  qRange <- q3-q1
+  lW <- q1-1.5*qRange
+  uW <- q3+1.5*qRange
+  result <- pnorm(lW,mean=0,sd=x)+(1-pnorm(uW,mean=0,sd=x))
+  print(result)
+}
+```
