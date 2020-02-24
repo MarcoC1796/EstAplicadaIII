@@ -1,0 +1,90 @@
+---
+title: "Tarea 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tarea 2
+
+## Pregunta 5
+
+
+```{r cars}
+library(plyr)
+library(dplyr)
+datos <- read.csv("INEGIConstruccion2017.csv", header=TRUE,encoding="latin1",stringsAsFactors = F)
+datos <- datos[1,]
+nameVars <- names(datos)
+title <- gsub("Construcción..encuesta.mensual....Por.entidad.federativa...", replacement = "", x = nameVars) 
+
+pos <- grep(pattern = "Horas.trabajadas...Total.", x = title, value=FALSE) 
+varN <- gsub("Horas.trabajadas...Total.","", title[pos])
+varN <- gsub(".Miles.de.horas.","", varN) 
+x1 <- datos[pos] 
+names(x1) <- varN
+
+#Definiendo X1: Total de horas trabajadas (Miles de horas)
+pos <- grep(pattern = "Valor.de.producción.generado.en.la.entidad...En.términos.reales...Por.tipo.de.obra...Total.", x = title, value=FALSE) 
+varN <- gsub("Valor.de.producción.generado.en.la.entidad...En.términos.reales...Por.tipo.de.obra...Total.","", title[pos])
+varN <- gsub(".Miles.de.pesos.a.precios.de.junio.de.2012..","", varN) 
+x2 <- datos[pos] 
+names(x2) <- varN
+
+#Definiendo X2: Valor total de producción generado en la entidad por tipo de obra ($ en términos reales)
+pos <- grep(pattern = "Valor.de.producción.generado.en.la.entidad...En.términos.reales...Por.tipo.de.obra...Total.", x = title, value=FALSE) 
+varN <- gsub("Valor.de.producción.generado.en.la.entidad...En.términos.reales...Por.tipo.de.obra...Total.","", title[pos])
+varN <- gsub(".Miles.de.pesos.a.precios.de.junio.de.2012..","", varN) 
+x2 <- datos[pos] 
+names(x2) <- varN
+
+#Definiendo X3: Total de horas trabajadas Dependiente (Miles de horas)
+pos <- grep(pattern = "Horas.trabajadas...Dependiente...Total.", x = title, value=FALSE) 
+varN <- gsub("Horas.trabajadas...Dependiente...Total.","", title[pos])
+varN <- gsub(".Miles.de.horas.","", varN) 
+x3 <- datos[pos] 
+names(x3) <- varN
+
+#Definiendo X4: Obreros Dependiente
+pos <- grep(pattern = "Horas.trabajadas...Dependiente...Obreros.", x = title, value=FALSE) 
+varN <- gsub("Horas.trabajadas...Dependiente...Obreros.","", title[pos])
+varN <- gsub(".Miles.de.horas.","", varN) 
+x4 <- datos[pos] 
+names(x4) <- varN
+
+#Definiendo X5: Empleados Dependiente
+pos <- grep(pattern = "Horas.trabajadas...Dependiente...Empleados.", x = title, value=FALSE) 
+varN <- gsub("Horas.trabajadas...Dependiente...Empleados.","", title[pos])
+varN <- gsub(".Miles.de.horas.","", varN) 
+x5 <- datos[pos] 
+names(x5) <- varN
+
+#Definiendo X6: Empleados Dependiente
+pos <- grep(pattern = "Horas.trabajadas...Dependiente...Propietarios..familiares.y.otros.trabajadores.no.remunerados.", x = title, value=FALSE) 
+varN <- gsub("Horas.trabajadas...Dependiente...Propietarios..familiares.y.otros.trabajadores.no.remunerados.","", title[pos])
+varN <- gsub(".Miles.de.horas..","", varN) 
+x6 <- datos[pos] 
+names(x6) <- varN
+
+#Definiendo X7: Empleados Dependiente
+pos <- grep(pattern = "Horas.trabajadas...No.dependiente.", x = title, value=FALSE) 
+varN <- gsub("Horas.trabajadas...No.dependiente.","", title[pos])
+varN <- gsub(".Miles.de.horas.","", varN) 
+x7 <- datos[pos] 
+names(x7) <- varN
+
+variables <- list(x1,x2,x3,x4,x5,x6,x7)
+df <- as.data.frame(t(do.call(rbind.fill,variables)))
+df <- df[1:32,]
+
+mean <- colMeans(df,na.rm=T)
+print(mean)
+covMatrix <- cov(df, use = "complete.obs")
+print(covMatrix)
+S <- cov(log(df), use="complete.obs") 
+R <- cor(log(df), use="complete.obs") 
+print(det(S))
+print(prod(diag(S))*prod(eigen(R)$values))
+```
